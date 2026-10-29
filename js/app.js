@@ -4,7 +4,7 @@ const PHONE = '918700037522';
 const WEB3FORMS_KEY = '8a0d93e2-defe-4e28-969a-efbbecd990f5';
 const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/farheen.ali108@gmail.com';
 
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 20;
 const DEFAULT_FILTER = { category: 'Diwali', sub: 'Lights' };
 const state = { products: [], services: [], ...DEFAULT_FILTER, q: '', limit: PAGE_SIZE };
 const $ = (s, el = document) => el.querySelector(s);
@@ -132,7 +132,7 @@ function renderProducts() {
   $('#result-count').textContent = `Showing ${shown.length} of ${list.length} products`;
   const more = $('#view-more');
   more.hidden = shown.length >= list.length;
-  more.textContent = `View more (${list.length - shown.length} left)`;
+  more.textContent = `See more (${list.length - shown.length} more)`;
 }
 
 $('#cat-select').addEventListener('change', e => {
