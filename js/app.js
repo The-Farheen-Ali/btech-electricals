@@ -21,7 +21,7 @@ function openContact(message, context = '') {
   $('#cm-wa').focus();
 }
 modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('.modal-x')) modal.hidden = true; });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { modal.hidden = true; closeOffer(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { modal.hidden = true; detail.hidden = true; closeOffer(); } });
 
 
 /* ---------- Diwali offer popup: shown on every page load, including refresh ---------- */
@@ -45,7 +45,7 @@ document.addEventListener('click', e => {
 // Wait while another popup is open so two never stack.
 function showOfferWhenFree() {
   if (offerDone) return;
-  if (!modal.hidden) return setTimeout(showOfferWhenFree, 3000);
+  if (!modal.hidden || !detail.hidden) return setTimeout(showOfferWhenFree, 3000);
   offer.hidden = false;
 }
 setTimeout(showOfferWhenFree, OFFER_DELAY_MS);
@@ -92,7 +92,7 @@ function renderFilters() {
 
 function productCard(p) {
   const msg = `Hello Btech Electricals, I am interested in "${p.name}" (${rupee(p.price)}). Is it available?`;
-  return `<article class="card">
+  return `<article class="card" data-detail="p:${p.id}" tabindex="0">
     <div class="ph">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">` : '<span class="noimg">💡</span>'}</div>
     <div class="body">
       <span class="tag">${esc(p.sub_category || p.category)}</span>
@@ -150,7 +150,7 @@ $('#view-more').addEventListener('click', () => { state.limit += PAGE_SIZE; rend
 function renderServices() {
   $('#service-grid').innerHTML = state.services.map(s => {
     const msg = `Hello Btech Electricals, I would like to book "${s.name}". Please share the details.`;
-    return `<article class="card">
+    return `<article class="card" data-detail="s:${s.id}" tabindex="0">
       <div class="ph">${s.image ? `<img src="${esc(s.image)}" alt="${esc(s.name)}" loading="lazy">` : `<span class="noimg">${esc(s.icon || '🔧')}</span>`}</div>
       <div class="body">
         <span class="tag">${esc(s.category)}</span>
@@ -236,6 +236,20 @@ async function downloadBrochure() {
 }
 $('#brochure-btn').addEventListener('click', downloadBrochure);
 
+/* ---------- Email delivery (contact form and product ratings) ---------- */
+async function sendEmail(subject, fields) {
+  const [url, payload] = WEB3FORMS_KEY
+    ? ['https://api.web3forms.com/submit', { access_key: WEB3FORMS_KEY, subject, from_name: 'Btech Electricals website', ...fields }]
+    : [FORMSUBMIT_ENDPOINT, { _subject: subject, _template: 'table', _captcha: 'false', ...fields }];
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || String(data.success) === 'false') throw new Error(data.message || 'Request failed');
+}
+
 /* ---------- Feedback / contact form → email ---------- */
 const form = $('#contact-form');
 form.addEventListener('submit', async e => {
@@ -261,22 +275,107 @@ form.addEventListener('submit', async e => {
       Subject: checks.subject,
       Description: checks.description,
     };
-    const [url, payload] = WEB3FORMS_KEY
-      ? ['https://api.web3forms.com/submit', { access_key: WEB3FORMS_KEY, subject, from_name: 'Btech Electricals website', ...fields }]
-      : [FORMSUBMIT_ENDPOINT, { _subject: subject, _template: 'table', _captcha: 'false', ...fields }];
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || String(data.success) === 'false') throw new Error(data.message || 'Request failed');
+    await sendEmail(subject, fields);
     form.reset();
     status.className = 'form-status ok';
     status.textContent = "Thank you! Your message has been sent. We'll contact you soon.";
   } catch {
     status.className = 'form-status err';
     status.innerHTML = `Sorry, the message couldn't be sent. Please <a href="${waLink(`${checks.subject}\n\n${checks.description}`)}" target="_blank" rel="noopener">send it on WhatsApp</a> instead.`;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+/* ---------- Product / service detail popup ---------- */
+const detail = $('#detail-modal');
+const rateForm = $('#dm-feedback');
+let current = null; // { kind: 'Product' | 'Service', item }
+let rating = 0;
+
+function setRating(n) {
+  rating = n;
+  rateForm.querySelectorAll('.star-input button').forEach((b, i) => {
+    b.classList.toggle('on', i < n);
+    b.setAttribute('aria-checked', i + 1 === n);
+  });
+}
+
+function openDetail(key) {
+  const [type, id] = key.split(':');
+  const item = (type === 'p' ? state.products : state.services).find(x => String(x.id) === id);
+  if (!item) return;
+  const isProduct = type === 'p';
+  current = { kind: isProduct ? 'Product' : 'Service', item };
+  $('#dm-ph').innerHTML = item.image ? `<img src="${esc(item.image)}" alt="${esc(item.name)}">`
+    : `<span class="noimg">${esc(item.icon || '💡')}</span>`;
+  $('#dm-ph').classList.toggle('svc', !isProduct);
+  $('#dm-tag').textContent = isProduct ? [item.category, item.sub_category].filter(Boolean).join(' · ') : item.category;
+  $('#dm-title').textContent = item.name;
+  $('#dm-price').innerHTML = isProduct ? rupee(item.price) : `${rupee(item.visit_charge)} <small>visit charge · repair cost quoted after inspection</small>`;
+  $('#dm-desc').textContent = item.description || '';
+  $('#dm-wa').href = waLink(isProduct
+    ? `Hello Btech Electricals, I am interested in "${item.name}" (${rupee(item.price)}). Is it available?`
+    : `Hello Btech Electricals, I would like to book "${item.name}". Please share the details.`);
+  $('#dm-rate-title').textContent = `Rate this ${current.kind.toLowerCase()}`;
+  rateForm.reset(); setRating(0);
+  $('.form-status', rateForm).textContent = '';
+  detail.hidden = false;
+  detail.querySelector('.modal-card').scrollTop = 0;
+  $('.modal-x', detail).focus();
+}
+
+document.addEventListener('click', e => {
+  const card = e.target.closest('[data-detail]');
+  if (card && !e.target.closest('button, a')) openDetail(card.dataset.detail);
+});
+document.addEventListener('keydown', e => {
+  const card = e.target.closest?.('[data-detail]');
+  if (card && e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openDetail(card.dataset.detail); }
+});
+detail.addEventListener('click', e => { if (e.target === detail || e.target.closest('.modal-x')) detail.hidden = true; });
+rateForm.querySelector('.star-input').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (b) setRating(Number(b.dataset.star));
+});
+
+// "Send enquiry" fills the contact form below with this item and takes the visitor there.
+$('#dm-enquire').addEventListener('click', () => {
+  const { kind, item } = current;
+  detail.hidden = true;
+  form.elements.type.value = 'Enquiry';
+  form.elements.subject.value = `${kind === 'Product' ? 'Enquiry' : 'Booking'}: ${item.name}`.slice(0, 120);
+  form.elements.description.value = kind === 'Product'
+    ? `I am interested in "${item.name}" (${rupee(item.price)}). Please tell me if it is available.`
+    : `I would like to book "${item.name}". Please share the details.`;
+  $('#contact').scrollIntoView();
+  form.elements.phone.focus({ preventScroll: true });
+});
+
+rateForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const status = $('.form-status', rateForm);
+  if (!rating) { status.className = 'form-status err'; status.textContent = 'Please tap the stars to choose a rating.'; return; }
+  const phone = rateForm.elements.phone.value.replace(/[\s-]/g, '');
+  if (phone && !/^(\+?91)?[6-9]\d{9}$/.test(phone)) {
+    status.className = 'form-status err'; status.textContent = 'Please enter a valid mobile number or leave it empty.'; return;
+  }
+  const { kind, item } = current;
+  const btn = $('button[type=submit]', rateForm);
+  btn.disabled = true; status.className = 'form-status'; status.textContent = 'Sending…';
+  try {
+    await sendEmail(`⭐ New Feedback: ${'★'.repeat(rating)}${'☆'.repeat(5 - rating)} for ${item.name}`, {
+      'Message type': 'FEEDBACK',
+      [kind]: item.name,
+      Rating: `${rating} / 5`,
+      Comment: rateForm.elements.comment.value.trim() || '(none)',
+      'Contact number': phone || '(not given)',
+    });
+    rateForm.reset(); setRating(0);
+    status.className = 'form-status ok'; status.textContent = 'Thank you for your feedback!';
+  } catch {
+    status.className = 'form-status err';
+    status.innerHTML = `Sorry, it couldn't be sent. Please <a href="${waLink(`My rating for "${item.name}": ${rating}/5`)}" target="_blank" rel="noopener">send it on WhatsApp</a> instead.`;
   } finally {
     btn.disabled = false;
   }

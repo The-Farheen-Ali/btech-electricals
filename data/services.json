@@ -6,7 +6,8 @@
   "category": "Home Service",
   "sub_category": "",
   "icon": "🔌",
-  "image": ""
+  "image": "",
+  "description": "New and old house wiring, MCB/DB board fitting, earthing and fault finding, done safely with ISI-mark wire and fittings."
  },
  {
   "id": 2,
@@ -15,7 +16,8 @@
   "category": "Home Service",
   "sub_category": "",
   "icon": "💡",
-  "image": "images/services/house-fitting.jpg"
+  "image": "images/services/house-fitting.jpg",
+  "description": "Fitting of switches, sockets, lights, tube lights, doorbells and inverters, plus shifting or replacing old fittings."
  },
  {
   "id": 3,
@@ -24,7 +26,8 @@
   "category": "Home Service",
   "sub_category": "",
   "icon": "🌀",
-  "image": "images/services/fan-installation.jpg"
+  "image": "images/services/fan-installation.jpg",
+  "description": "Ceiling, wall and exhaust fan installation, regulator fitting, and fixing fan noise, wobble or slow speed."
  },
  {
   "id": 4,
@@ -33,7 +36,8 @@
   "category": "Appliance Repair",
   "sub_category": "",
   "icon": "🧺",
-  "image": "images/services/washing-machine-repair-cleaning.jpg"
+  "image": "images/services/washing-machine-repair-cleaning.jpg",
+  "description": "Repair of top-load, front-load and semi-automatic machines: motor, drain, spin, timer and PCB faults, plus deep drum cleaning."
  },
  {
   "id": 5,
@@ -42,7 +46,8 @@
   "category": "Appliance Repair",
   "sub_category": "",
   "icon": "🚿",
-  "image": "images/services/geyser-repair.jpg"
+  "image": "images/services/geyser-repair.jpg",
+  "description": "Repair of storage and instant geysers: heating element, thermostat, leakage and tripping problems."
  },
  {
   "id": 6,
@@ -51,7 +56,8 @@
   "category": "Appliance Repair",
   "sub_category": "",
   "icon": "❄️",
-  "image": "images/services/cooler-repair.jpg"
+  "image": "images/services/cooler-repair.jpg",
+  "description": "Air cooler repair and service: motor, pump, fan, switch and wiring faults, and pad replacement."
  },
  {
   "id": 7,
@@ -60,7 +66,8 @@
   "category": "Appliance Repair",
   "sub_category": "",
   "icon": "🥤",
-  "image": "images/services/mixer-grinder-repair.jpg"
+  "image": "images/services/mixer-grinder-repair.jpg",
+  "description": "Mixer grinder repair: motor rewinding, carbon brushes, coupler, switch and jar problems."
  },
  {
   "id": 8,
@@ -69,7 +76,8 @@
   "category": "Appliance Repair",
   "sub_category": "",
   "icon": "🔥",
-  "image": "images/services/room-heater-electric-kettle-repair.jpg"
+  "image": "images/services/room-heater-electric-kettle-repair.jpg",
+  "description": "Repair of room heaters, blowers and electric kettles: element, thermostat, switch and cord faults."
  },
  {
   "id": 9,
@@ -78,6 +86,7 @@
   "category": "Appliance Repair",
   "sub_category": "",
   "icon": "⚙️",
-  "image": "images/services/motor-repair.jpg"
+  "image": "images/services/motor-repair.jpg",
+  "description": "Water pump and motor repair, rewinding, capacitor and starter replacement, and installation."
  }
 ]

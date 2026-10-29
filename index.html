@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=14">
+  <link rel="stylesheet" href="css/style.css?v=17">
   <script>
     // Theme: ?theme=<name> in the URL, else the one last picked in the preview picker, else the default.
     (function () {
@@ -251,6 +251,40 @@
   </div>
 </div>
 
+<!-- Product / service detail -->
+<div class="modal" id="detail-modal" hidden>
+  <div class="modal-card detail-card" role="dialog" aria-modal="true" aria-labelledby="dm-title">
+    <button class="modal-x" aria-label="Close">×</button>
+    <div class="dm-ph" id="dm-ph"></div>
+    <div class="dm-body">
+      <span class="tag" id="dm-tag"></span>
+      <h3 id="dm-title"></h3>
+      <a class="dm-rating" href="https://maps.app.goo.gl/oWYURZHMkjxJW46YA" target="_blank" rel="noopener">
+        <span class="stars" aria-hidden="true">★★★★★</span> <b>4.5</b> shop rating on Google ↗
+      </a>
+      <p class="price" id="dm-price"></p>
+      <p class="dm-desc" id="dm-desc"></p>
+      <div class="dm-actions">
+        <a class="btn btn-primary" href="tel:+918700037522">📞 Call</a>
+        <a class="btn btn-wa" id="dm-wa" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <button class="btn btn-ghost" id="dm-enquire" type="button">✉️ Send enquiry</button>
+      </div>
+      <form class="dm-feedback" id="dm-feedback" novalidate>
+        <b id="dm-rate-title">Rate this product</b>
+        <div class="star-input" role="radiogroup" aria-labelledby="dm-rate-title">
+          <button type="button" role="radio" data-star="1" aria-label="1 star">★</button><button type="button" role="radio" data-star="2" aria-label="2 stars">★</button><button type="button" role="radio" data-star="3" aria-label="3 stars">★</button><button type="button" role="radio" data-star="4" aria-label="4 stars">★</button><button type="button" role="radio" data-star="5" aria-label="5 stars">★</button>
+        </div>
+        <textarea name="comment" rows="2" maxlength="500" placeholder="Your feedback (optional)"></textarea>
+        <div class="dm-send">
+          <input name="phone" type="tel" inputmode="tel" maxlength="14" placeholder="Mobile number (optional)">
+          <button class="btn btn-primary btn-sm" type="submit">Send feedback</button>
+        </div>
+        <p class="form-status small" role="status"></p>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Contact chooser -->
 <div class="modal" id="contact-modal" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="cm-title">
@@ -264,6 +298,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js" defer></script>
-<script src="js/app.js?v=14" defer></script>
+<script src="js/app.js?v=15" defer></script>
 </body>
 </html>
