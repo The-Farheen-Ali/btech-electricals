@@ -1,0 +1,83 @@
+[
+ {
+  "id": 1,
+  "name": "House Wiring",
+  "visit_charge": 100,
+  "category": "Home Service",
+  "sub_category": "",
+  "icon": "🔌",
+  "image": ""
+ },
+ {
+  "id": 2,
+  "name": "House Fitting",
+  "visit_charge": 100,
+  "category": "Home Service",
+  "sub_category": "",
+  "icon": "💡",
+  "image": "images/services/house-fitting.jpg"
+ },
+ {
+  "id": 3,
+  "name": "Fan Installation",
+  "visit_charge": 100,
+  "category": "Home Service",
+  "sub_category": "",
+  "icon": "🌀",
+  "image": "images/services/fan-installation.jpg"
+ },
+ {
+  "id": 4,
+  "name": "Washing Machine Repair & Cleaning",
+  "visit_charge": 100,
+  "category": "Appliance Repair",
+  "sub_category": "",
+  "icon": "🧺",
+  "image": "images/services/washing-machine-repair-cleaning.jpg"
+ },
+ {
+  "id": 5,
+  "name": "Geyser Repair",
+  "visit_charge": 100,
+  "category": "Appliance Repair",
+  "sub_category": "",
+  "icon": "🚿",
+  "image": "images/services/geyser-repair.jpg"
+ },
+ {
+  "id": 6,
+  "name": "Cooler Repair",
+  "visit_charge": 100,
+  "category": "Appliance Repair",
+  "sub_category": "",
+  "icon": "❄️",
+  "image": "images/services/cooler-repair.jpg"
+ },
+ {
+  "id": 7,
+  "name": "Mixer Grinder Repair",
+  "visit_charge": 100,
+  "category": "Appliance Repair",
+  "sub_category": "",
+  "icon": "🥤",
+  "image": "images/services/mixer-grinder-repair.jpg"
+ },
+ {
+  "id": 8,
+  "name": "Room Heater & Electric Kettle Repair",
+  "visit_charge": 100,
+  "category": "Appliance Repair",
+  "sub_category": "",
+  "icon": "🔥",
+  "image": "images/services/room-heater-electric-kettle-repair.jpg"
+ },
+ {
+  "id": 9,
+  "name": "Motor Repair",
+  "visit_charge": 100,
+  "category": "Appliance Repair",
+  "sub_category": "",
+  "icon": "⚙️",
+  "image": "images/services/motor-repair.jpg"
+ }
+]
