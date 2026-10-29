@@ -4,7 +4,7 @@ const PHONE = '918700037522';
 const WEB3FORMS_KEY = '8a0d93e2-defe-4e28-969a-efbbecd990f5';
 const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/farheen.ali108@gmail.com';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = matchMedia('(max-width: 640px)').matches ? 10 : 20; // products per page: phones 10, larger screens 20
 const DEFAULT_FILTER = { category: 'Diwali', sub: 'Lights' };
 const state = { products: [], services: [], ...DEFAULT_FILTER, q: '', limit: PAGE_SIZE };
 const $ = (s, el = document) => el.querySelector(s);
