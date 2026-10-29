@@ -313,7 +313,9 @@ function openDetail(key) {
   $('#dm-tag').textContent = isProduct ? [item.category, item.sub_category].filter(Boolean).join(' · ') : item.category;
   $('#dm-title').textContent = item.name;
   $('#dm-price').innerHTML = isProduct ? rupee(item.price) : `${rupee(item.visit_charge)} <small>visit charge · repair cost quoted after inspection</small>`;
-  $('#dm-desc').textContent = item.description || '';
+  const desc = $('#dm-desc');
+  desc.textContent = item.description || '';
+  desc.classList.add('clamp');
   $('#dm-wa').href = waLink(isProduct
     ? `Hello Btech Electricals, I am interested in "${item.name}" (${rupee(item.price)}). Is it available?`
     : `Hello Btech Electricals, I would like to book "${item.name}". Please share the details.`);
@@ -321,7 +323,11 @@ function openDetail(key) {
   rateForm.reset(); setRating(0);
   $('.form-status', rateForm).textContent = '';
   detail.hidden = false;
-  detail.querySelector('.modal-card').scrollTop = 0;
+  detail.querySelector('.modal-card').scrollTop = $('.dm-body', detail).scrollTop = 0;
+  // Long descriptions show 4 lines with a "Read more" toggle.
+  const more = $('#dm-more');
+  more.hidden = desc.scrollHeight <= desc.clientHeight + 2;
+  more.textContent = 'Read more';
   $('.modal-x', detail).focus();
 }
 
@@ -332,6 +338,10 @@ document.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   const card = e.target.closest?.('[data-detail]');
   if (card && e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openDetail(card.dataset.detail); }
+});
+$('#dm-more').addEventListener('click', e => {
+  const open = $('#dm-desc').classList.toggle('clamp');
+  e.target.textContent = open ? 'Read more' : 'Read less';
 });
 detail.addEventListener('click', e => { if (e.target === detail || e.target.closest('.modal-x')) detail.hidden = true; });
 rateForm.querySelector('.star-input').addEventListener('click', e => {
